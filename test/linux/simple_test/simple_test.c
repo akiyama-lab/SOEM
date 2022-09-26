@@ -83,9 +83,28 @@ void simpletest(char *ifname)
          {
             printf("Operational state reached for all slaves.\n");
             inOP = TRUE;
-                /* cyclic loop */
-            for(i = 1; i <= 10000; i++)
+            
+//            for(i = 1; i <= 10000; i++)
+            for(i = 1; i <= 2000; i++)
             {
+               ec_send_processdata();
+               wkc = ec_receive_processdata(EC_TIMEOUTRET);
+               
+//               IOmapに値を入れる
+                if ((i/1000) % 2 == 1 )
+               {
+                   IOmap[0] = 1;
+               }
+               else
+               {
+                   IOmap[0] = 0;
+               }
+
+               // IOmapの結果を確認する
+               printf("IOmap[0]: 0x%02x, IOmap[1]: 0x%02x \n", *ec_slave[0].outputs, *ec_slave[0].inputs);
+            
+                /* cyclic loop */
+
                ec_send_processdata();
                wkc = ec_receive_processdata(EC_TIMEOUTRET);
 
